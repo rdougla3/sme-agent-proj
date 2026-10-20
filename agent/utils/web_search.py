@@ -1,13 +1,25 @@
 import os
 from pathlib import Path
-
 from dotenv import load_dotenv
 import httpx
 import trafilatura
 
+from models.web_query import QuerySet
+from utils.tui import progress_text
+
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
-def search_web(query: str, num_results: int = 10, timeout: float = 20):
+def search_web(querySet: QuerySet):
+    results = []
+    stop_text = progress_text("Searching the web")
+    try:
+        for query in querySet['queries']:
+            results.extend(run_query(query['query'], num_results=query['results_count']))
+        return results
+    finally:
+        stop_text()
+
+def run_query(query: str, num_results: int = 10, timeout: float = 20):
     key = os.environ["TAVILY_API_KEY"]
     with httpx.Client(timeout=timeout) as client:
         response = client.post(

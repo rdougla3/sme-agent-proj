@@ -1,6 +1,6 @@
 from graph import graph
 
-query = "what are the pros and cons of using PFA vs ACF release flim in SLA/DLP 3d printing?"
+query = input("Type a detailed & specific query for the research agent to analyize, such as: \nWhat are the pros and cons of using PFA release flim compared to ACF and traditional FEP in SLA/DLP 3d printing?\n\n")
 
 result = graph.invoke({
     "query": query,
@@ -8,3 +8,5 @@ result = graph.invoke({
     "research_findings": {},
     "final_report": ""
 })
+
+print("\n", result["final_report"])
